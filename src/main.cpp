@@ -15,11 +15,21 @@
 #define STAGE4_DELAY        1000
 #define STAGE5_DELAY        1000
 
-void state_1(void);
-void state_2(void);
-void state_3(void);
-void state_4(void);
-void state_5(void);
+typedef struct 
+{
+  uint8_t solenoid1_position;
+  uint8_t solenoid2_position;
+  uint32_t state_delay;
+} state_t;
+
+state_t latch_test_sequence[] =
+{
+  (state_t){.solenoid1_position = RETRACTED,  .solenoid2_position = EXTENDED,           .state_delay = 1000},
+  (state_t){.solenoid1_position = RETRACTED,  .solenoid2_position = RETRACTED,          .state_delay = 1000},
+  (state_t){.solenoid1_position = RETRACTED,  .solenoid2_position = PARTIALLY_EXTENDED, .state_delay = 1000},
+  (state_t){.solenoid1_position = EXTENDED,   .solenoid2_position = RETRACTED,          .state_delay = 1000},
+  (state_t){.solenoid1_position = RETRACTED,  .solenoid2_position = EXTENDED,           .state_delay = 1000},
+};
 
 int iteration_counter = 1;
 
@@ -38,58 +48,12 @@ void setup()
 void loop()
 {
   Serial.print("Cycle #");
-  Serial.print(iteration_counter++);
-  Serial.println(" (");
+  Serial.println(iteration_counter++);
 
-  Serial.print("1-");
-  state_1();
-  delay(STAGE1_DELAY);
-
-  Serial.print("2-");
-  state_2();
-  delay(STAGE2_DELAY);
-
-  Serial.print("3-");
-  state_3();
-  delay(STAGE3_DELAY);
-
-  Serial.print("4-");
-  state_4();
-  delay(STAGE4_DELAY);
-  
-  Serial.print("5");
-  state_5();
-  delay(STAGE5_DELAY);
-
-  Serial.println(")");
-}
-
-void state_1(void)
-{
-  analogWrite(PIN_SOLENOID1, RETRACTED);
-  analogWrite(PIN_SOLENOID2, EXTENDED);
-}
-
-void state_2(void)
-{
-  analogWrite(PIN_SOLENOID1, RETRACTED);
-  analogWrite(PIN_SOLENOID2, RETRACTED);
-}
-
-void state_3(void)
-{
-  analogWrite(PIN_SOLENOID1, RETRACTED);
-  analogWrite(PIN_SOLENOID2, PARTIALLY_EXTENDED);
-}
-
-void state_4(void)
-{
-  analogWrite(PIN_SOLENOID1, EXTENDED);
-  analogWrite(PIN_SOLENOID2, RETRACTED);
-}
-
-void state_5(void)
-{
-  analogWrite(PIN_SOLENOID1, RETRACTED);
-  analogWrite(PIN_SOLENOID2, EXTENDED);
+  for (uint32_t sequence_index = 0; sequence_index < (sizeof(latch_test_sequence)/sizeof(state_t)); sequence_index++)
+  {
+    analogWrite(PIN_SOLENOID1, latch_test_sequence[sequence_index].solenoid1_position);
+    analogWrite(PIN_SOLENOID2, latch_test_sequence[sequence_index].solenoid2_position);
+    delay(latch_test_sequence[sequence_index].state_delay);
+  }
 }
