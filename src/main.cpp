@@ -9,12 +9,6 @@
 #define EXTENDED            0
 #define PARTIALLY_EXTENDED  127
 
-#define STAGE1_DELAY        1000
-#define STAGE2_DELAY        1000
-#define STAGE3_DELAY        1000
-#define STAGE4_DELAY        1000
-#define STAGE5_DELAY        1000
-
 typedef struct 
 {
   uint8_t solenoid1_position;
