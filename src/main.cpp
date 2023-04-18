@@ -2,17 +2,21 @@
 #include <Servo.h>
 #include <EEPROM.h>
 
-#define SERIAL_BAUDRATE     115200
+// #define RESET_COUNTER
 
-#define PIN_SERVO1          32
-#define PIN_SERVO2          33
+#define SERIAL_BAUDRATE         115200
 
-#define SERVO_MIN_PULSE_US  100
-#define SERVO_MAX_PULSE_US  2000
+#define PIN_SERVO1              32
+#define PIN_SERVO2              33
 
-#define RETRACTED           0
-#define EXTENDED            180
-#define PARTIALLY_EXTENDED  90
+#define SERVO_MIN_PULSE_US      544
+#define SERVO_MAX_PULSE_US      2400
+
+#define RETRACTED               0
+#define EXTENDED                180
+#define PARTIALLY_EXTENDED      90
+
+#define COUNTER_EERPOM_ADDRESS  0
 
 Servo servo1;
 Servo servo2;
@@ -38,20 +42,24 @@ uint32_t iteration_counter = 0;
 void setup()
 {
   EEPROM.begin(4);
-  iteration_counter = EEPROM.read(0);
+#ifdef RESET_COUNTER
+  EEPROM.put(COUNTER_EERPOM_ADDRESS,iteration_counter);
+#else
+  EEPROM.get(COUNTER_EERPOM_ADDRESS, iteration_counter);
+#endif
 
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("--- Latch Tester ---");
 
-  servo1.attach(PIN_SERVO1);
-  servo2.attach(PIN_SERVO2);
+  servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
+  servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
 }
 
 void loop()
 {
   Serial.print("Cycle #");
   Serial.println(iteration_counter++);
-  EEPROM.write(0, iteration_counter);
+  EEPROM.put(COUNTER_EERPOM_ADDRESS, iteration_counter);
 
   for (uint32_t sequence_index = 0; sequence_index < (sizeof(latch_test_sequence)/sizeof(state_t)); sequence_index++)
   {
