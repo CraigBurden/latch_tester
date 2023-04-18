@@ -28,6 +28,11 @@ typedef struct
   uint32_t state_delay;
 } state_t;
 
+/**
+ * @Max you can add and remove stages below, set the angles in degrees for each servo and how long it should dwell in each state.
+ * Add and remove as you need. The names RETRACTED, EXTENDED and PARTIALLY_EXTENDED are just variables set above so that you can easily change
+ * the range of motion without needing to change it in a few places. You can add more if you need by copying a #define ... line above and give it a new name
+*/
 state_t latch_test_sequence[] =
 {
   (state_t){.servo1_position = RETRACTED,  .servo2_position = EXTENDED,           .state_delay = 1000},
