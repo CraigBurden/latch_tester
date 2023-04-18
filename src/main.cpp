@@ -33,10 +33,13 @@ state_t latch_test_sequence[] =
   (state_t){.servo1_position = RETRACTED,  .servo2_position = EXTENDED,           .state_delay = 1000},
 };
 
-int iteration_counter = 1;
+uint32_t iteration_counter = 0;
 
 void setup()
 {
+  EEPROM.begin(4);
+  iteration_counter = EEPROM.read(0);
+
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("--- Latch Tester ---");
 
@@ -48,6 +51,7 @@ void loop()
 {
   Serial.print("Cycle #");
   Serial.println(iteration_counter++);
+  EEPROM.write(0, iteration_counter);
 
   for (uint32_t sequence_index = 0; sequence_index < (sizeof(latch_test_sequence)/sizeof(state_t)); sequence_index++)
   {
