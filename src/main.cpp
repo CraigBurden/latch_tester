@@ -6,8 +6,8 @@
 
 #define SERIAL_BAUDRATE         115200
 
-#define PIN_SERVO1              32
-#define PIN_SERVO2              33
+#define PIN_SERVO1              2
+#define PIN_SERVO2              0
 
 #define SERVO_MIN_PULSE_US      544
 #define SERVO_MAX_PULSE_US      2400
@@ -19,13 +19,13 @@
 #define COUNTER_EERPOM_ADDRESS  0
 
 Servo servo1;
-Servo servo2;
+// Servo servo2;
 
 typedef struct 
 {
-  uint32_t servo1_position;
-  uint32_t servo2_position;
-  uint32_t state_delay;
+  int servo1_position;
+  int servo2_position;
+  int state_delay;
 } state_t;
 
 /**
@@ -56,8 +56,10 @@ void setup()
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("--- Latch Tester ---");
 
-  servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
-  servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
+  // servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
+  // servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
+  servo1.attach(PIN_SERVO1);
+  // servo2.attach(PIN_SERVO2);
 }
 
 void loop()
@@ -69,7 +71,7 @@ void loop()
   for (uint32_t sequence_index = 0; sequence_index < (sizeof(latch_test_sequence)/sizeof(state_t)); sequence_index++)
   {
     servo1.write(latch_test_sequence[sequence_index].servo1_position);
-    servo2.write(latch_test_sequence[sequence_index].servo2_position);
+    // servo2.write(latch_test_sequence[sequence_index].servo2_position);
     delay(latch_test_sequence[sequence_index].state_delay);
   }
 }
