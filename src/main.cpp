@@ -16,7 +16,10 @@
 #define EXTENDED                180
 #define PARTIALLY_EXTENDED      90
 
-#define COUNTER_EERPOM_ADDRESS  0
+#define INITED_EEPROM_ADDRESS   0
+#define COUNTER_EERPOM_ADDRESS  4
+
+#define EEPROM_INITED_VALUE     0xDEADBEEF
 
 Servo servo1;
 Servo servo2;
@@ -43,14 +46,26 @@ state_t latch_test_sequence[] =
 };
 
 uint32_t iteration_counter = 0;
+uint32_t eeprom_inited_variable = 0;
 
 void setup()
 {
-  EEPROM.begin(4);
+  EEPROM.begin();
 #ifdef RESET_COUNTER
+  EEPROM.put(INITED_EEPROM_ADDRESS, EEPROM_INITED_VALUE);
   EEPROM.put(COUNTER_EERPOM_ADDRESS,iteration_counter);
 #else
-  EEPROM.get(COUNTER_EERPOM_ADDRESS, iteration_counter);
+  EEPROM.get(INITED_EEPROM_ADDRESS, eeprom_inited_variable);
+
+  if(eeprom_inited_variable == EEPROM_INITED_VALUE)
+  {
+    EEPROM.get(COUNTER_EERPOM_ADDRESS, iteration_counter);
+  }
+  else
+  {
+    EEPROM.put(INITED_EEPROM_ADDRESS, EEPROM_INITED_VALUE);
+    EEPROM.put(COUNTER_EERPOM_ADDRESS,iteration_counter);
+  }
 #endif
 
   Serial.begin(SERIAL_BAUDRATE);
