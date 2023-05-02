@@ -56,10 +56,8 @@ void setup()
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("--- Latch Tester ---");
 
-  // servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
-  // servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
-  servo1.attach(PIN_SERVO1);
-  servo2.attach(PIN_SERVO2);
+  servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
+  servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
 }
 
 void loop()
