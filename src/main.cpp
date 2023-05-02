@@ -19,7 +19,7 @@
 #define COUNTER_EERPOM_ADDRESS  0
 
 Servo servo1;
-// Servo servo2;
+Servo servo2;
 
 typedef struct 
 {
@@ -59,7 +59,7 @@ void setup()
   // servo1.attach(PIN_SERVO1, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
   // servo2.attach(PIN_SERVO2, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US);
   servo1.attach(PIN_SERVO1);
-  // servo2.attach(PIN_SERVO2);
+  servo2.attach(PIN_SERVO2);
 }
 
 void loop()
@@ -71,7 +71,7 @@ void loop()
   for (uint32_t sequence_index = 0; sequence_index < (sizeof(latch_test_sequence)/sizeof(state_t)); sequence_index++)
   {
     servo1.write(latch_test_sequence[sequence_index].servo1_position);
-    // servo2.write(latch_test_sequence[sequence_index].servo2_position);
+    servo2.write(latch_test_sequence[sequence_index].servo2_position);
     delay(latch_test_sequence[sequence_index].state_delay);
   }
 }
