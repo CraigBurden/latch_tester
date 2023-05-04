@@ -8,6 +8,7 @@
 
 #define PIN_SERVO1              3
 #define PIN_SERVO2              5
+#define PIN_BUTTON              2
 
 #define SERVO_MIN_PULSE_US      544
 #define SERVO_MAX_PULSE_US      2400
@@ -50,6 +51,8 @@ uint32_t eeprom_inited_variable = 0;
 
 void setup()
 {
+  pinMode(PIN_BUTTON, INPUT_PULLUP);
+
   EEPROM.begin();
 #ifdef RESET_COUNTER
   EEPROM.put(INITED_EEPROM_ADDRESS, EEPROM_INITED_VALUE);
@@ -57,7 +60,7 @@ void setup()
 #else
   EEPROM.get(INITED_EEPROM_ADDRESS, eeprom_inited_variable);
 
-  if(eeprom_inited_variable == EEPROM_INITED_VALUE)
+  if((eeprom_inited_variable == EEPROM_INITED_VALUE) && digitalRead(PIN_BUTTON))
   {
     EEPROM.get(COUNTER_EERPOM_ADDRESS, iteration_counter);
   }
