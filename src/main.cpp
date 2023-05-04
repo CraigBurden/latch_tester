@@ -6,8 +6,8 @@
 
 #define SERIAL_BAUDRATE         115200
 
-#define PIN_SERVO1              2
-#define PIN_SERVO2              0
+#define PIN_SERVO1              3
+#define PIN_SERVO2              5
 
 #define SERVO_MIN_PULSE_US      544
 #define SERVO_MAX_PULSE_US      2400
